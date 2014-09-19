@@ -9,36 +9,63 @@
 #http://blog.chinaunix.net/uid-20639775-id-3154234.html
 
 #BEGIN*************************表单列表***************************BEGIN
-#. c_brand ：品牌表
-#. c_category ：分类表
-#. c_category_brand ：分类品牌限定表，即分类下有哪些品牌，对于品牌比较多时，品牌下拉很长，这个表方便品牌选择
-#. c_prop_item ：属性项表，网站列表页中的商品查询是搜索API提供，基础数据即来源于此
-#. c_prop_value ：属性值表，属性项下的值列表
-#. c_category_prop_item ：分类属性项限定表，即分类下有哪些属性项
-#. c_category_prop_value ：分类属性值限定表，及分类下有哪些属性值
-#. c_commodity ：商品表
-#. c_product ：货品表，即SKU
-#. c_commodity_picture ： 商品图片表
-#. c_commodity_prop ：商品属性表
-#. c_commodity_log ：商品操作日志表
-#. c_commodity_price_log ：调价日志表
-#. c_sizechart ：尺码对照表，简称尺码表
-#. c_category_brand_sizechart ：品牌尺码表限定表，即品牌下有哪些尺码表可以选择
-#. c_dictionary ： 字典表，状态类型等字典数据都要存储于此，方便使用
+#. m_member ：会员表
+#. m_member_consignee ：会员收货地址表
+#. m_commodity_comment ：商品评论表
+#. m_member_log ：会员日志表
+#. m_member_process_log ：自动任务处理会员积分、等级日志表，基于效率性能考虑，会员积分、等级都是一天算一次
+#. m_member_money_io ：会员虚拟账户IO表
+#. m_member_score_io ：会员积分IO表
+#. m_dictionary ： 字典表，状态类型等字典数据都要存储于此，方便使用
 #END***************************表单列表***************************END
 
-#品牌表
-DROP TABLE IF EXISTS `c_brand`;
-CREATE TABLE `c_brand` (
-`id`  int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
-`name`  varchar(50) NOT NULL DEFAULT '' COMMENT '品牌名称' ,
-`english_name`  varchar(50) NOT NULL DEFAULT '' COMMENT '英文名称' ,
-`website`  varchar(200) NOT NULL DEFAULT '' COMMENT '品牌网址' ,
-`pic_large`  varchar(100) NOT NULL DEFAULT '' COMMENT '品牌大图(140*120)' ,
-`pic_middle`  varchar(100) NOT NULL DEFAULT '' COMMENT '品牌中图(110*50)' ,
-`pic_small`  varchar(100) NOT NULL DEFAULT '' COMMENT '品牌小图(85*40)' ,
-`letter`  char(1) NOT NULL DEFAULT '' COMMENT '归属哪个字母：A-Z' ,
-`sort_no`  int(4) NOT NULL DEFAULT 0 COMMENT '排序号' ,
+#会员表
+DROP TABLE IF EXISTS `m_member`;
+CREATE TABLE `m_member` (
+`id`  int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
+`username`  varchar(30) NOT NULL DEFAULT '' COMMENT '会员名' ,
+`password`  varchar(50) NOT NULL DEFAULT '' COMMENT '密码' ,
+`realname`  varchar(30) NOT NULL DEFAULT '' COMMENT '真实姓名' ,
+`province`  varchar(20) NOT NULL DEFAULT '' COMMENT '省份' ,
+`city`  varchar(20) NOT NULL DEFAULT '' COMMENT '城市' ,
+`area`  varchar(20) NOT NULL DEFAULT '' COMMENT '地区' ,
+`address`  varchar(200) NOT NULL DEFAULT '' COMMENT '地址' ,
+`postcode`  varchar(6) NOT NULL DEFAULT '' COMMENT '邮编' ,
+`telephone`  varchar(30) NOT NULL DEFAULT '' COMMENT '电话' ,
+`mobile`  varchar(11) NOT NULL DEFAULT '' COMMENT '手机' ,
+`email`  varchar(50) NOT NULL DEFAULT '' COMMENT 'Email' ,
+`gender`  varchar(2) NOT NULL DEFAULT '' COMMENT '性别' ,
+`question`  varchar(50) NOT NULL DEFAULT '' COMMENT '密码提示问题' ,
+`answer`  varchar(50) NOT NULL DEFAULT '' COMMENT '提示问题答案' ,
+`source_type_id`  tinyint(4) NOT NULL DEFAULT 0 COMMENT '来源' ,
+`level_type_id`  tinyint(4) NOT NULL DEFAULT 0 COMMENT '等级' ,
+`account_money`  decimal(18,2) NOT NULL DEFAULT 0 COMMENT '会员虚拟账户金额' ,
+`account_score`  decimal(18,2) NOT NULL DEFAULT 0 COMMENT '会员购买积分' ,
+`is_lock`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否锁定：1是0否' ,
+`is_black`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否黑名单：1是0否' ,
+`create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
+`create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
+`update_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '更新人' ,
+`update_date`  datetime NOT NULL COMMENT '更新时间' ,
+PRIMARY KEY (`id`)
+)
+COMMENT='会员表'
+;
+
+#收货地址
+DROP TABLE IF EXISTS `m_member_consignee`;
+CREATE TABLE `m_member_consignee` (
+`id`  int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
+`member_id`  int(11) NOT NULL DEFAULT 0 COMMENT '会员ID' ,
+`province`  varchar(20) NOT NULL DEFAULT '' COMMENT '省份' ,
+`city`  varchar(20) NOT NULL DEFAULT '' COMMENT '城市' ,
+`area`  varchar(20) NOT NULL DEFAULT '' COMMENT '地区' ,
+`address`  varchar(200) NOT NULL DEFAULT '' COMMENT '地址' ,
+`postcode`  varchar(6) NOT NULL DEFAULT '' COMMENT '邮编' ,
+`consignee`  varchar(50) NOT NULL DEFAULT '' COMMENT '收货人' ,
+`telephone`  varchar(30) NOT NULL DEFAULT '' COMMENT '电话' ,
+`mobile`  varchar(11) NOT NULL DEFAULT '' COMMENT '手机' ,
+`email`  varchar(50) NOT NULL DEFAULT '' COMMENT 'Email' ,
 `is_delete`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1是0否' ,
 `create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
 `create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
@@ -46,275 +73,112 @@ CREATE TABLE `c_brand` (
 `update_date`  datetime NOT NULL COMMENT '更新时间' ,
 PRIMARY KEY (`id`)
 )
-COMMENT='品牌表'
+COMMENT='收货地址'
 ;
 
-#分类表
-DROP TABLE IF EXISTS `c_category`;
-CREATE TABLE `c_category` (
-`id`  int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
-`name`  varchar(50) NOT NULL DEFAULT '' COMMENT '分类名称' ,
-`struct_name`  varchar(200) NOT NULL DEFAULT '' COMMENT '中文名称的分类结构' ,
-`level`  int(4) NOT NULL DEFAULT 1 COMMENT '层级：1,2,3' ,
-`parent_id`  int(4) UNSIGNED NOT NULL COMMENT '父级id' ,
-`sort_no`  int(4) NOT NULL DEFAULT 0 COMMENT '排序号' ,
-`is_delete`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1是0否' ,
+#商品评论表
+DROP TABLE IF EXISTS `m_commodity_comment`;
+CREATE TABLE `m_commodity_comment` (
+`id`  int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
+`no`  varchar(15) NOT NULL DEFAULT '' COMMENT '商品编号' ,
+`member_id`  int(11) NOT NULL DEFAULT 0 COMMENT '会员ID' ,
+`score`  tinyint(4) NOT NULL DEFAULT 0 COMMENT '评分' ,
+`size_type_id`  tinyint(4) NOT NULL DEFAULT 0 COMMENT '尺码大小' ,
+`remark`  varchar(500) NOT NULL DEFAULT '' COMMENT '评价内容' ,
+`reply`  varchar(500) NOT NULL DEFAULT '' COMMENT '客服回复' ,
+`status`  tinyint(4) NOT NULL DEFAULT 0 COMMENT '0新评论1已回复-1已删除' ,
 `create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
 `create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
 `update_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '更新人' ,
 `update_date`  datetime NOT NULL COMMENT '更新时间' ,
-PRIMARY KEY (`id`),
-INDEX `idx_struct_name` (`struct_name`) USING BTREE 
+PRIMARY KEY (`id`)
 )
-COMMENT='分类表'
+COMMENT='商品评论表'
 ;
 
-#品牌分类关系表
-DROP TABLE IF EXISTS `c_category_brand`;
-CREATE TABLE `c_category_brand` (
-`id`  int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
-`category_id`  int(4) UNSIGNED NOT NULL COMMENT '分类ID' ,
-`brand_id`  int(4) UNSIGNED NOT NULL COMMENT '品牌ID' ,
+#会员日志表
+DROP TABLE IF EXISTS `m_member_log`;
+CREATE TABLE `m_member_log` (
+`id`  int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
+`member_id`  int(11) NOT NULL DEFAULT 0 COMMENT '会员ID' ,
+`log_type_id`  tinyint(4) NOT NULL DEFAULT 0 COMMENT '日志类型ID' ,
+`log_content`  varchar(200) NOT NULL DEFAULT '' COMMENT '日志内容' ,
 `create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
 `create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
+`create_ip`  varchar(20) NOT NULL COMMENT '记录生成IP' ,
 PRIMARY KEY (`id`) ,
-INDEX `idx_category_brand_brand_id` (`brand_id`) USING BTREE ,
-INDEX `idx_category_brand_category_id` (`category_id`) USING BTREE 
+INDEX `idx_member_log_member_id` (`member_id`) USING BTREE 
 )
-COMMENT='品牌分类关系表'
+COMMENT='会员日志表'
 ;
 
-
-#属性项表
-DROP TABLE IF EXISTS `c_prop_item`;
-CREATE TABLE `c_prop_item` (
-`id`  int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
-`name`  varchar(50) NOT NULL COMMENT '属性项名称' ,
-`sort_no`  int(4) NOT NULL DEFAULT 0 COMMENT '排序号' ,
-`is_delete`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1是0否' ,
+#自动任务处理会员积分、等级日志表
+DROP TABLE IF EXISTS `m_member_process_log`;
+CREATE TABLE `m_member_process_log` (
+`id`  int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
+`member_id`  int(11) NOT NULL DEFAULT 0 COMMENT '会员ID' ,
+`log_type_id`  tinyint(4) NOT NULL DEFAULT 0 COMMENT '日志类型ID' ,
+`log_content`  varchar(200) NOT NULL DEFAULT '' COMMENT '日志内容' ,
 `create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
 `create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
-`update_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '更新人' ,
-`update_date`  datetime NOT NULL COMMENT '更新时间' ,
+`create_ip`  varchar(20) NOT NULL COMMENT '记录生成IP' ,
 PRIMARY KEY (`id`) ,
-INDEX `idx_prop_item_name` (`name`) USING BTREE 
+INDEX `idx_member_process_log_member_id` (`member_id`) USING BTREE 
 )
-COMMENT='属性项表'
+COMMENT='自动任务处理会员积分、等级日志表'
 ;
 
-#属性值表
-DROP TABLE IF EXISTS `c_prop_value`;
-CREATE TABLE `c_prop_value` (
-`id`  int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
-`name`  varchar(50) NOT NULL COMMENT '属性值名称' ,
-`prop_item_id`  int(4) UNSIGNED NOT NULL COMMENT '属性项ID' ,
-`sort_no`  int(4) NOT NULL DEFAULT 0 COMMENT '排序号' ,
-`is_delete`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1是0否' ,
+#会员虚拟账户IO表
+DROP TABLE IF EXISTS `m_member_money_io`;
+CREATE TABLE `m_member_money_io` (
+`id`  int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
+`member_id`  int(11) NOT NULL DEFAULT 0 COMMENT '会员ID' ,
+`form_code`  varchar(15) NOT NULL DEFAULT '' COMMENT '涉及订单号' ,
+`refund_code`  varchar(15) NOT NULL DEFAULT '' COMMENT '涉及退款单号' ,
+`money_type_id`  tinyint(4) NOT NULL DEFAULT 0 COMMENT '款项流转类型ID' ,
+`operate_money`  decimal(18,2) NOT NULL DEFAULT 0 COMMENT '本次操作金额，+入-出' ,
+`before_money`  decimal(18,2) NOT NULL DEFAULT 0 COMMENT '之前虚拟账户金额' ,
+`after_money`  decimal(18,2) NOT NULL DEFAULT 0 COMMENT '之后虚拟账户金额' ,
+`remark`  varchar(50) NOT NULL DEFAULT '' COMMENT '备注' ,
 `create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
 `create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
-`update_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '更新人' ,
-`update_date`  datetime NOT NULL COMMENT '更新时间' ,
+`create_ip`  varchar(20) NOT NULL COMMENT '记录生成IP' ,
 PRIMARY KEY (`id`) ,
-INDEX `idx_prop_value_name` (`name`) USING BTREE ,
-INDEX `idx_prop_item_id` (`prop_item_id`) USING BTREE 
+INDEX `idx_member_money_io_member_id` (`member_id`) USING BTREE ,
+INDEX `idx_member_money_io_form_code` (`form_code`) USING BTREE 
 )
-COMMENT='属性值表'
+COMMENT='会员虚拟账户IO表'
 ;
 
-#分类属性项关系表
-DROP TABLE IF EXISTS `c_category_prop_item`;
-CREATE TABLE `c_category_prop_item` (
-`id`  int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
-`category_id`  int(4) UNSIGNED NOT NULL COMMENT '分类ID' ,
-`prop_item_id`  int(4) UNSIGNED NOT NULL COMMENT '属性项ID' ,
-`is_required`  int(4) NOT NULL DEFAULT 0 COMMENT '是否必填：1是0否' ,
-`is_multiple`  int(4) NOT NULL DEFAULT 0 COMMENT '是否多选：1是0否' ,
-`is_show`  int(4) NOT NULL DEFAULT 0 COMMENT '是否前台显示：1是0否' ,
+#会员积分IO表
+DROP TABLE IF EXISTS `m_member_score_io`;
+CREATE TABLE `m_member_score_io` (
+`id`  int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
+`member_id`  int(11) NOT NULL DEFAULT 0 COMMENT '会员ID' ,
+`form_code`  varchar(15) NOT NULL DEFAULT '' COMMENT '涉及订单号' ,
+`score_type_id`  tinyint(4) NOT NULL DEFAULT 0 COMMENT '积分流转类型ID' ,
+`operate_score`  decimal(18,2) NOT NULL DEFAULT 0 COMMENT '本次操作积分，+入-出' ,
+`before_score`  decimal(18,2) NOT NULL DEFAULT 0 COMMENT '之前积分' ,
+`after_score`  decimal(18,2) NOT NULL DEFAULT 0 COMMENT '之后积分' ,
+`remark`  varchar(50) NOT NULL DEFAULT '' COMMENT '备注' ,
 `create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
 `create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
-`update_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '更新人' ,
-`update_date`  datetime NOT NULL COMMENT '更新时间' ,
+`create_ip`  varchar(20) NOT NULL COMMENT '记录生成IP' ,
 PRIMARY KEY (`id`) ,
-INDEX `idx_category_id` (`category_id`) USING BTREE ,
-INDEX `idx_prop_item_id` (`prop_item_id`) USING BTREE 
+INDEX `idx_member_score_io_member_id` (`member_id`) USING BTREE ,
+INDEX `idx_member_score_io_form_code` (`form_code`) USING BTREE 
 )
-COMMENT='分类属性项关系表'
-;
-
-#分类属性值关系表
-DROP TABLE IF EXISTS `c_category_prop_value`;
-CREATE TABLE `c_category_prop_value` (
-`id`  int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
-`category_id`  int(4) UNSIGNED NOT NULL COMMENT '分类ID' ,
-`prop_value_id`  int(4) UNSIGNED NOT NULL COMMENT '属性值ID' ,
-`create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
-`create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
-PRIMARY KEY (`id`) ,
-INDEX `idx_category_id` (`category_id`) USING BTREE ,
-INDEX `idx_prop_value_id` (`prop_value_id`) USING BTREE 
-)
-COMMENT='分类属性值关系表'
-;
-
-#商品表
-DROP TABLE IF EXISTS `c_commodity`;
-CREATE TABLE `c_commodity` (
-`no`  varchar(15) NOT NULL COMMENT '主键，商品编号' ,
-`sno`  varchar(50) NOT NULL COMMENT '供应商款色编码，一般是款号+颜色，供应商方对商品的标记' ,
-`style_no`  varchar(30) NOT NULL COMMENT '供应商款号，用来标记一款商品' ,
-`name`  varchar(200) NOT NULL COMMENT '商品名称' ,
-`brand_id`  int(4) UNSIGNED NOT NULL COMMENT '所属品牌ID' ,
-`category_id`  int(4) UNSIGNED NOT NULL COMMENT '所属分类ID' ,
-`supplier_id`  int(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '所属供应商ID' ,
-`sizechart_id`  int(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '所属尺码对照表ID' ,
-`color`  varchar(50) NOT NULL COMMENT '商品颜色' ,
-`pic_color`  varchar(200) NOT NULL DEFAULT '' COMMENT '商品颜色图' ,
-`pic_ver`  int(4) NOT NULL DEFAULT 0 COMMENT '图片版本号，操作一次，版本+1，方便清理CDN缓存' ,
-`cost_price`  decimal(20,3) NOT NULL DEFAULT 0 COMMENT '成本价' ,
-`sale_price`  decimal(20,3) NOT NULL DEFAULT 0 COMMENT '销售价' ,
-`market_price`  decimal(20,3) NOT NULL DEFAULT 0 COMMENT '市场价' ,
-`status`  int(4) NOT NULL DEFAULT 0 COMMENT '状态：1.新建（待进货）、2.待售（入库后）、3.上架（在售）、4.下架（停售），将来有审核的话用-状态' ,
-`pic_flag`  int(4) NOT NULL DEFAULT 0 COMMENT '图片是否上传完整，一般图片完整就是商编完成的意思：1是0否' ,
-`is_delete`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1是0否' ,
-`create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
-`create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
-`update_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '更新人' ,
-`update_date`  datetime NOT NULL COMMENT '更新时间' ,
-`line_id`  bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增ID，用于其它系统同步等特殊用途' ,
-PRIMARY KEY (`no`) ,
-INDEX `idx_commodity_supplier_id` (`supplier_id`) USING BTREE ,
-INDEX `idx_commodity_brand_id` (`brand_id`) USING BTREE ,
-INDEX `idx_commodity_category_id` (`category_id`) USING BTREE ,
-INDEX `idx_commodity_line_id` (`line_id`) USING BTREE 
-)
-COMMENT='商品表'
-;
-
-#货品表
-DROP TABLE IF EXISTS `c_product`;
-CREATE TABLE `c_product` (
-`no`  varchar(20) NOT NULL COMMENT '主键，货品编号' ,
-`commodity_no`  varchar(15) NOT NULL COMMENT '商品编号' ,
-`barcode`  varchar(30) NOT NULL COMMENT '条形码' ,
-`size`  varchar(30) NOT NULL COMMENT '尺码' ,
-`is_delete`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1是0否' ,
-`create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
-`create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
-`update_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '更新人' ,
-`update_date`  datetime NOT NULL COMMENT '更新时间' ,
-PRIMARY KEY (`no`) ,
-INDEX `idx_product_barcode` (`barcode`) USING BTREE ,
-INDEX `idx_product_size` (`size`) USING BTREE 
-)
-COMMENT='货品表'
-;
-
-#商品图片表
-DROP TABLE IF EXISTS `c_commodity_picture`;
-CREATE TABLE `c_commodity_picture` (
-`name`  varchar(20) NOT NULL COMMENT '主键，图片名称' ,
-`commodity_no`  varchar(15) NOT NULL COMMENT '商品编号' ,
-`type`  char(1) NOT NULL DEFAULT 0 COMMENT '图片类型' ,
-`create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
-`create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
-`update_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '更新人' ,
-`update_date`  datetime NOT NULL COMMENT '更新时间' ,
-PRIMARY KEY (`name`) ,
-INDEX `idx_commodity_picture_commodity_no` (`commodity_no`) USING BTREE 
-)
-COMMENT='商品图片表'
-;
-
-#商品属性表
-DROP TABLE IF EXISTS `c_commodity_prop`;
-CREATE TABLE `c_commodity_prop` (
-`id`  int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
-`commodity_no`  varchar(15) NOT NULL COMMENT '商品编号' ,
-`prop_value_id`  int(4) UNSIGNED NOT NULL COMMENT '属性值ID' ,
-`create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
-`create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
-`update_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '更新人' ,
-`update_date`  datetime NOT NULL COMMENT '更新时间' ,
-PRIMARY KEY (`id`) ,
-INDEX `idx_commodity_prop_commodity_no` (`commodity_no`) USING BTREE 
-)
-COMMENT='商品属性表'
-;
-
-#商品日志表
-DROP TABLE IF EXISTS `c_commodity_log`;
-CREATE TABLE `c_commodity_log` (
-`id`  int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
-`commodity_no`  varchar(15) NOT NULL COMMENT '商品编号' ,
-`type`  int(4) NOT NULL DEFAULT 0 COMMENT '日志类型' ,
-`remark`  varchar(500) NOT NULL DEFAULT '' COMMENT '日志描述' ,
-`create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
-`create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
-PRIMARY KEY (`id`) ,
-INDEX `idx_commodity_log_commodity_no` (`commodity_no`) USING BTREE 
-)
-COMMENT='商品日志表'
-;
-
-#商品调价日志表
-DROP TABLE IF EXISTS `c_commodity_price_log`;
-CREATE TABLE `c_commodity_price_log` (
-`id`  int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
-`commodity_no`  varchar(15) NOT NULL COMMENT '商品编号' ,
-`type`  int(4) NOT NULL COMMENT '日志类型：1成本价2销售价3市场价' ,
-`old_price`  decimal(20,3) NOT NULL COMMENT '原价格' ,
-`new_price`  decimal(20,3) NOT NULL COMMENT '新价格' ,
-`create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
-`create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
-PRIMARY KEY (`id`) ,
-INDEX `idx_commodity_log_commodity_no` (`commodity_no`) USING BTREE 
-)
-COMMENT='商品调价日志表'
-;
-
-#商品尺码对照表
-DROP TABLE IF EXISTS `c_sizechart`;
-CREATE TABLE `c_sizechart` (
-`id`  int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
-`title`  varchar(50) NOT NULL COMMENT '名称' ,
-`content`  varchar(1024) NOT NULL COMMENT '内容,JSON' ,
-`remark`  varchar(100) NOT NULL DEFAULT '' COMMENT '备注' ,
-`type`  int(4) NOT NULL DEFAULT 0 COMMENT '类型：1不限制2限制分类3限制品牌4限制分类和品牌' ,
-`is_delete`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除：1是0否' ,
-`create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
-`create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
-`update_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '更新人' ,
-`update_date`  datetime NOT NULL COMMENT '更新时间' ,
-PRIMARY KEY (`id`) 
-)
-COMMENT='商品尺码对照表'
-;
-
-#商品尺码对照表使用限制表-只有存在限制的尺码对照表才会在这个表中有数据
-DROP TABLE IF EXISTS `c_sizechart_category_brand`;
-CREATE TABLE `c_sizechart_category_brand` (
-`id`  int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
-`sizechart_id`  int(4) UNSIGNED NOT NULL COMMENT '尺码对照表ID' ,
-`cat_id`  int(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '限制分类ID,0代表不限制' ,
-`brand_id`  int(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '限制分类ID,0代表不限制' ,
-`create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
-`create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
-PRIMARY KEY (`id`)  ,
-INDEX `idx_sizechart_category_brand_sizechart_id` (`sizechart_id`) USING BTREE ,
-INDEX `idx_sizechart_category_brand_cat_id` (`cat_id`) USING BTREE ,
-INDEX `idx_sizechart_category_brand_brand_id` (`brand_id`) USING BTREE 
-)
-COMMENT='商品尺码对照表使用限制表-只有存在限制的尺码对照表才会在这个表中有数据'
+COMMENT='会员积分IO表'
 ;
 
 #类型状态字典表
-DROP TABLE IF EXISTS `c_dictionary`;
-CREATE TABLE `c_dictionary` (
-`id`  int(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
+DROP TABLE IF EXISTS `m_dictionary`;
+CREATE TABLE `m_dictionary` (
+`id`  smallint(6) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键' ,
 `group`  varchar(50) NOT NULL COMMENT '状态分组' ,
-`code`  varchar(5) NOT NULL COMMENT '状态代码' ,
+`code`  tinyint(4) NOT NULL COMMENT '状态代码' ,
 `name`  varchar(100) NOT NULL COMMENT '状态名称' ,
-`sort_no`  int(4) NOT NULL DEFAULT 0 COMMENT '排序号' ,
+`sort_no`  tinyint(4) NOT NULL DEFAULT 0 COMMENT '排序号' ,
 `create_person`  varchar(30) NOT NULL DEFAULT '' COMMENT '记录生成人' ,
 `create_date`  datetime NOT NULL COMMENT '记录生成时间' ,
 PRIMARY KEY (`id`) ,

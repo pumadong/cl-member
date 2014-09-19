@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cl.member.mapper.member.MemberScoreIOMapper" >
+  <resultMap id="BaseResultMap" type="com.cl.member.model.member.MemberScoreIO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="form_code" property="formCode" jdbcType="VARCHAR" />
+    <result column="score_type_id" property="scoreTypeId" jdbcType="TINYINT" />
+    <result column="operate_score" property="operateScore" jdbcType="DECIMAL" />
+    <result column="before_score" property="beforeScore" jdbcType="DECIMAL" />
+    <result column="after_score" property="afterScore" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_person" property="createPerson" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_ip" property="createIp" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, member_id, form_code, score_type_id, operate_score, before_score, after_score, 
+    remark, create_person, create_date, create_ip
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_member_score_io
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from m_member_score_io
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cl.member.model.member.MemberScoreIO" >
+    insert into m_member_score_io (id, member_id, form_code, 
+      score_type_id, operate_score, before_score, 
+      after_score, remark, create_person, 
+      create_date, create_ip)
+    values (#{id,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{formCode,jdbcType=VARCHAR}, 
+      #{scoreTypeId,jdbcType=TINYINT}, #{operateScore,jdbcType=DECIMAL}, #{beforeScore,jdbcType=DECIMAL}, 
+      #{afterScore,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{createPerson,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{createIp,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cl.member.model.member.MemberScoreIO" >
+    insert into m_member_score_io
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="formCode != null" >
+        form_code,
+      </if>
+      <if test="scoreTypeId != null" >
+        score_type_id,
+      </if>
+      <if test="operateScore != null" >
+        operate_score,
+      </if>
+      <if test="beforeScore != null" >
+        before_score,
+      </if>
+      <if test="afterScore != null" >
+        after_score,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createPerson != null" >
+        create_person,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="createIp != null" >
+        create_ip,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="formCode != null" >
+        #{formCode,jdbcType=VARCHAR},
+      </if>
+      <if test="scoreTypeId != null" >
+        #{scoreTypeId,jdbcType=TINYINT},
+      </if>
+      <if test="operateScore != null" >
+        #{operateScore,jdbcType=DECIMAL},
+      </if>
+      <if test="beforeScore != null" >
+        #{beforeScore,jdbcType=DECIMAL},
+      </if>
+      <if test="afterScore != null" >
+        #{afterScore,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createPerson != null" >
+        #{createPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createIp != null" >
+        #{createIp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cl.member.model.member.MemberScoreIO" >
+    update m_member_score_io
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="formCode != null" >
+        form_code = #{formCode,jdbcType=VARCHAR},
+      </if>
+      <if test="scoreTypeId != null" >
+        score_type_id = #{scoreTypeId,jdbcType=TINYINT},
+      </if>
+      <if test="operateScore != null" >
+        operate_score = #{operateScore,jdbcType=DECIMAL},
+      </if>
+      <if test="beforeScore != null" >
+        before_score = #{beforeScore,jdbcType=DECIMAL},
+      </if>
+      <if test="afterScore != null" >
+        after_score = #{afterScore,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createPerson != null" >
+        create_person = #{createPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createIp != null" >
+        create_ip = #{createIp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cl.member.model.member.MemberScoreIO" >
+    update m_member_score_io
+    set member_id = #{memberId,jdbcType=INTEGER},
+      form_code = #{formCode,jdbcType=VARCHAR},
+      score_type_id = #{scoreTypeId,jdbcType=TINYINT},
+      operate_score = #{operateScore,jdbcType=DECIMAL},
+      before_score = #{beforeScore,jdbcType=DECIMAL},
+      after_score = #{afterScore,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_person = #{createPerson,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_ip = #{createIp,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

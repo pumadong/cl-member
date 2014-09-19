@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cl.member.mapper.member.MemberMoneyIOMapper" >
+  <resultMap id="BaseResultMap" type="com.cl.member.model.member.MemberMoneyIO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="form_code" property="formCode" jdbcType="VARCHAR" />
+    <result column="refund_code" property="refundCode" jdbcType="VARCHAR" />
+    <result column="money_type_id" property="moneyTypeId" jdbcType="TINYINT" />
+    <result column="operate_money" property="operateMoney" jdbcType="DECIMAL" />
+    <result column="before_money" property="beforeMoney" jdbcType="DECIMAL" />
+    <result column="after_money" property="afterMoney" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_person" property="createPerson" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_ip" property="createIp" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, member_id, form_code, refund_code, money_type_id, operate_money, before_money, 
+    after_money, remark, create_person, create_date, create_ip
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_member_money_io
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from m_member_money_io
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cl.member.model.member.MemberMoneyIO" >
+    insert into m_member_money_io (id, member_id, form_code, 
+      refund_code, money_type_id, operate_money, 
+      before_money, after_money, remark, 
+      create_person, create_date, create_ip
+      )
+    values (#{id,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{formCode,jdbcType=VARCHAR}, 
+      #{refundCode,jdbcType=VARCHAR}, #{moneyTypeId,jdbcType=TINYINT}, #{operateMoney,jdbcType=DECIMAL}, 
+      #{beforeMoney,jdbcType=DECIMAL}, #{afterMoney,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
+      #{createPerson,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{createIp,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cl.member.model.member.MemberMoneyIO" >
+    insert into m_member_money_io
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="formCode != null" >
+        form_code,
+      </if>
+      <if test="refundCode != null" >
+        refund_code,
+      </if>
+      <if test="moneyTypeId != null" >
+        money_type_id,
+      </if>
+      <if test="operateMoney != null" >
+        operate_money,
+      </if>
+      <if test="beforeMoney != null" >
+        before_money,
+      </if>
+      <if test="afterMoney != null" >
+        after_money,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createPerson != null" >
+        create_person,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="createIp != null" >
+        create_ip,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="formCode != null" >
+        #{formCode,jdbcType=VARCHAR},
+      </if>
+      <if test="refundCode != null" >
+        #{refundCode,jdbcType=VARCHAR},
+      </if>
+      <if test="moneyTypeId != null" >
+        #{moneyTypeId,jdbcType=TINYINT},
+      </if>
+      <if test="operateMoney != null" >
+        #{operateMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="beforeMoney != null" >
+        #{beforeMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="afterMoney != null" >
+        #{afterMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createPerson != null" >
+        #{createPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createIp != null" >
+        #{createIp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cl.member.model.member.MemberMoneyIO" >
+    update m_member_money_io
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="formCode != null" >
+        form_code = #{formCode,jdbcType=VARCHAR},
+      </if>
+      <if test="refundCode != null" >
+        refund_code = #{refundCode,jdbcType=VARCHAR},
+      </if>
+      <if test="moneyTypeId != null" >
+        money_type_id = #{moneyTypeId,jdbcType=TINYINT},
+      </if>
+      <if test="operateMoney != null" >
+        operate_money = #{operateMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="beforeMoney != null" >
+        before_money = #{beforeMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="afterMoney != null" >
+        after_money = #{afterMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createPerson != null" >
+        create_person = #{createPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createIp != null" >
+        create_ip = #{createIp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cl.member.model.member.MemberMoneyIO" >
+    update m_member_money_io
+    set member_id = #{memberId,jdbcType=INTEGER},
+      form_code = #{formCode,jdbcType=VARCHAR},
+      refund_code = #{refundCode,jdbcType=VARCHAR},
+      money_type_id = #{moneyTypeId,jdbcType=TINYINT},
+      operate_money = #{operateMoney,jdbcType=DECIMAL},
+      before_money = #{beforeMoney,jdbcType=DECIMAL},
+      after_money = #{afterMoney,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_person = #{createPerson,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_ip = #{createIp,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
